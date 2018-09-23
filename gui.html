@@ -138,6 +138,12 @@
         <div class="ui center aligned segment">
             <h2 id="game-time">00:00.00</h2>
             <button id="game-time-btn" class="ui button">Start/Stop</button>
+            <button id="game-time-reset-btn" class="ui button">Reset</button>
+        </div>
+        <div class="ui center aligned segment">
+            <button id="period-1" class="ui button">Regulation time</button>
+            <button id="period-2" class="ui button">Overtime</button>
+            <button id="period-3" class="ui button">Second overtime</button>
         </div>
     </div>
     <script>
@@ -166,7 +172,7 @@
             seconds = seconds % 60;
             ms = Math.floor((ms % 1000) / 10);
             $('#game-time')[0].innerText = (''+minutes).padStart(2, '0') + ":" + (''+seconds).padStart(2, '0') + "." + (''+ms).padStart(2,'0');
-            data.gameTime = seconds;
+            data.gameTime = seconds + 60 * minutes;
             updateClient(true);
         }
 
@@ -192,7 +198,11 @@
         $(document).ready(function() {
             fillData();
             $('#game-time-btn')[0].onclick = () => stopwatch.startstop();
+            $('#game-time-reset-btn')[0].onclick = () => stopwatch.reset();
             $('#update-info-btn')[0].onclick = () => { getData(); updateClient(true); }
+            $('#period-1')[0].onclick = () => { data.period = 1; updateClient(true); }
+            $('#period-2')[0].onclick = () => { data.period = 2; updateClient(true); }
+            $('#period-3')[0].onclick = () => { data.period = 3; updateClient(true); }
             $('#team-a-plus')[0].onclick = () => { 
                 let score = new Number($('#team-a-score')[0].value);
                 score += 10;

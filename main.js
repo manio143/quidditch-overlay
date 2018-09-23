@@ -107,6 +107,7 @@ server.ws("/socket", function (ws, req) {
       sendDataToClient();
     }
   });
+  ws.on("close", () => globalWs = null);
 });
 server.listen(8080);
 console.log('Started server on localhost:8080');
