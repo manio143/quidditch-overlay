@@ -59,6 +59,30 @@ ipcMain.on("setVar", function (event, msg) {
   global[variable] = value;
 });
 
+function sendDataToClient() {
+    if(globalWs == null) return;
+    let data = global.data;
+    if(data.teamAname != lastData.teamAname || data.teamAcolor != lastData.teamAcolor || data.teamBname != lastData.teamBname || data.teamBcolor != lastData.teamBcolor) {
+        data.type = "teamSetup";
+        globalWs.send(JSON.stringify(data));
+    }
+    if(data.teamAscore != lastData.teamAscore || data.teamBscore != lastData.teamBscore || data.teamAsnitches != lastData.teamAsnitches || data.teamBsnitches != lastData.teamBsnitches) {
+        data.type = "score";
+        globalWs.send(JSON.stringify(data));
+    }
+    if(data.period != lastData.period) {
+        data.type = "period";
+        globalWs.send(JSON.stringify(data));
+    }
+    if(data.gameTime != lastData.gameTime) {
+        globalWs.send(JSON.stringify({type: "time", gameTime: (new String(Math.floor(data.gameTime / 60))).padStart(2, '0') + " : " + (new String(data.gameTime % 60)).padStart(2, '0') }));
+    }
+    lastData = data;
+}
+ipcMain.on("updateClient", sendDataToClient);
+
+var lastData = {};
+
 server.use(express.static(__dirname + '/client'));
 var sampleDataSet = {
     teamAname: "Kraków Dragons",
@@ -76,27 +100,12 @@ server.get('/data', function (request, response) {
   response.send(JSON.stringify(sampleDataSet));
 });
 var globalWs = null;
-var counter = 1;
-var counterInterval = 0;
 server.ws("/socket", function (ws, req) {
   ws.on("message", function(msg) {
     if(msg == "ready") {
       globalWs = ws;
-      sampleDataSet.type = "teamSetup";
-      ws.send(JSON.stringify(sampleDataSet));
-      sampleDataSet.type = "score";
-      ws.send(JSON.stringify(sampleDataSet));
-      sampleDataSet.type = "period";
-      ws.send(JSON.stringify(sampleDataSet));
-      counterInterval = setInterval(function () {
-        counter++;
-        ws.send(JSON.stringify({type: "time", gameTime: (new String(Math.floor(counter / 60))).padStart(2, '0') + " : " + (new String(counter % 60)).padStart(2, '0') }));
-      }, 1000);
+      sendDataToClient();
     }
-  });
-  ws.on("close", function() {
-    if(counterInterval != 0)
-      clearInterval(counterInterval);
   });
 });
 server.listen(8080);
