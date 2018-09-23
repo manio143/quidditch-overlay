@@ -1,0 +1,30 @@
+body {
+  background-color: transparent !important;
+}
+
+#main {
+  padding: 20px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#header, #footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#score {
+  margin-bottom: 40px;
+  width: 180px;
+  text-align: center;
+}
+
+.name {
+  width: 500px;
+}

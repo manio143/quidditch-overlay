@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="semantic-build/semantic.css">
+    <link rel="stylesheet" href="custom.css">
+
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
+    <script src="semantic-build/semantic.js"></script>
+    <script src="update.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">
+        <div class="ui big buttons">
+          <button id="team-a-title" class="ui blue button name">Team A</button>
+          <div class="or" data-text="vs"></div>
+          <button id="team-b-title" class="ui green button name">Team B</button>
+        </div>
+        <div id="time" class="ui big label">
+          <span id="game-time">00 : 00</span>
+        </div>
+      </div>
+      <div id="footer">
+        <div id="score" class="ui huge label">
+          <span id="team-a-score">0</span>
+          <span id="team-a-snitches">**</span>
+          <span> - </span>
+          <span id="team-b-snitches">**</span>
+          <span id="team-b-score">0</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
