@@ -16,11 +16,10 @@
   "author": "Manio",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^2.0.10"
+    "electron": "^3.0.0"
   },
   "dependencies": {
     "express": "^4.16.3",
-    "express-ws": "^4.0.0",
-    "semantic-ui": "^2.4.0"
+    "express-ws": "^4.0.0"
   }
 }
