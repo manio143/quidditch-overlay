@@ -14,15 +14,19 @@
     <div id="main">
       <div id="header">
         <div class="ui big buttons">
-          <button id="team-a-title" class="ui blue button name">Team A</button>
+          <button id="team-a-title" class="ui blue button">Team A</button>
           <div class="or" data-text="vs"></div>
-          <button id="team-b-title" class="ui green button name">Team B</button>
+          <button id="team-b-title" class="ui green button">Team B</button>
         </div>
-        <div id="time" class="ui big label">
+        <div id="time" class="ui big bottom attached button">
           <span id="game-time">00 : 00</span>
         </div>
       </div>
       <div id="footer">
+        <div id="period" class="ui large  top attached button">
+          <span id="overtime" style="display: none">Overtime</span>
+          <span id="sndovertime" style="display: none">2nd Overtime</span>
+        </div>
         <div id="score" class="ui huge label">
           <span id="team-a-score">0</span>
           <span id="team-a-snitches">**</span>

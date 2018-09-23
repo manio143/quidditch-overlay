@@ -1,9 +1,10 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 
 const express = require('express')
 const path = require('path')
-const server = express()
+var server = express()
+require('express-ws')(server)
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -53,8 +54,13 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+ipcMain.on("setVar", function (event, msg) {
+  let {variable, value} = JSON.parse(msg);
+  global[variable] = value;
+});
+
 server.use(express.static(__dirname + '/client'));
-let sampleDataSet = {
+var sampleDataSet = {
     teamAname: "Kraków Dragons",
     teamAcolor: "green",
     teamAscore: 80,
@@ -68,6 +74,30 @@ let sampleDataSet = {
 }
 server.get('/data', function (request, response) {
   response.send(JSON.stringify(sampleDataSet));
+});
+var globalWs = null;
+var counter = 1;
+var counterInterval = 0;
+server.ws("/socket", function (ws, req) {
+  ws.on("message", function(msg) {
+    if(msg == "ready") {
+      globalWs = ws;
+      sampleDataSet.type = "teamSetup";
+      ws.send(JSON.stringify(sampleDataSet));
+      sampleDataSet.type = "score";
+      ws.send(JSON.stringify(sampleDataSet));
+      sampleDataSet.type = "period";
+      ws.send(JSON.stringify(sampleDataSet));
+      counterInterval = setInterval(function () {
+        counter++;
+        ws.send(JSON.stringify({type: "time", gameTime: (new String(Math.floor(counter / 60))).padStart(2, '0') + " : " + (new String(counter % 60)).padStart(2, '0') }));
+      }, 1000);
+    }
+  });
+  ws.on("close", function() {
+    if(counterInterval != 0)
+      clearInterval(counterInterval);
+  });
 });
 server.listen(8080);
 console.log('Started server on localhost:8080');
